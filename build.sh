@@ -198,7 +198,7 @@ cd $BUILDDIR/$ARCH
 		cd ..
 	} || exit 1
 
-	sed -i,tmp "s@LD_SONAME *=.*@LD_SONAME =@g" config/mh-linux
+	sed -i,tmp "s@MIDDLE_SO_TARGET@SO_TARGET@g" config/mh-linux
 	sed -i,tmp "s%ln -s *%cp -f \$(dir \$@)/%g" config/mh-linux
 
 	if [ $SHARED_ICU ]; then
