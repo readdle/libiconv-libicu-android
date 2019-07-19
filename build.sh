@@ -218,7 +218,7 @@ cd $BUILDDIR/$ARCH
 		--with-library-suffix=$LIBSUFFIX \
 		--with-cross-build=`pwd`/cross \
 		$libtype \
-		--with-data-packaging=archive \
+		--with-data-packaging=library \
 		|| exit 1
 
 #		ICULEHB_CFLAGS="-I$BUILDDIR/$ARCH/include" \
@@ -369,7 +369,7 @@ cd $BUILDDIR/$ARCH
 		--prefix=`pwd`/../../ \
 		--with-cross-build=`pwd`/cross \
 		--enable-static --disable-shared \
-		--with-data-packaging=archive \
+		--with-data-packaging=library \
 		--enable-layoutex \
 		|| exit 1
 
