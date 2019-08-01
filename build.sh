@@ -198,9 +198,6 @@ cd $BUILDDIR/$ARCH
 		cd ..
 	} || exit 1
 
-	sed -i,tmp "s@MIDDLE_SO_TARGET@SO_TARGET@g" config/mh-linux
-	sed -i,tmp "s%ln -s *%cp -f \$(dir \$@)/%g" config/mh-linux
-
 	if [ $SHARED_ICU ]; then
 		libtype='--enable-shared --disable-static'
 	else
@@ -225,13 +222,12 @@ cd $BUILDDIR/$ARCH
 #		ICULEHB_LIBS="-licu-le-hb" \
 #		--enable-layoutex \
 
-	sed -i,tmp "s@^prefix *= *.*@prefix = .@" icudefs.mk || exit 1
+	sed -i.tmp 's/.$(SO_TARGET_VERSION_MAJOR)//' icudefs.mk || exit 1
+	sed -i.tmp 's/$(PKGDATA_VERSIONING) -e/-e/'  data/Makefile || exit 1
 
 	env PATH=`pwd`:$PATH \
 		$BUILDDIR/setCrossEnvironment-$ARCH.sh \
 		make -j$NCPU VERBOSE=1 || exit 1
-
-	sed -i,tmp "s@^prefix *= *.*@prefix = `pwd`/../../@" icudefs.mk || exit 1
 
 	env PATH=`pwd`:$PATH \
 		$BUILDDIR/setCrossEnvironment-$ARCH.sh \
