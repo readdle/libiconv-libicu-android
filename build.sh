@@ -176,7 +176,7 @@ cd $BUILDDIR/$ARCH
 
 	rm -rf icu
 
-	tar xvf ../icu4c-59_2-src.tgz
+	tar xvf ../icu4c-68_2-src.tgz
 
   # The ENVVAR LIBSUFFIX should add the suffix only to the libname and not to the symbols.
   # ToDo: Find the right way in Swift to refer to an alternative library with symbol prefixing or any other method to
