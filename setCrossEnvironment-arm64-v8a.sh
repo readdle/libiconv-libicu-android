@@ -6,6 +6,8 @@ IFS='
 NDK=`which ndk-build`
 NDK=`dirname $NDK`
 
+API=21
+
 if uname -s | grep -i "linux" > /dev/null ; then
   MYARCH=linux-$(arch)
   NDK=`readlink -f $NDK`
@@ -18,13 +20,14 @@ fi
 #echo NDK $NDK
 GCCPREFIX=aarch64-linux-android
 [ -z "$NDK_TOOLCHAIN_VERSION" ] && NDK_TOOLCHAIN_VERSION=4.9
-[ -z "$PLATFORMVER" ] && PLATFORMVER=android-21
+[ -z "$PLATFORMVER" ] && PLATFORMVER=android-$API
 LOCAL_PATH=`dirname $0`
 if which realpath > /dev/null ; then
 	LOCAL_PATH=`realpath $LOCAL_PATH`
 else
 	LOCAL_PATH=`cd $LOCAL_PATH && pwd`
 fi
+
 ARCH=arm64-v8a
 
 
@@ -48,26 +51,26 @@ CFLAGS="
 -O2
 -g
 -gcc-toolchain
-$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
+$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/$MYARCH
 -target
 aarch64-none-linux-android
 -fpic
---sysroot $NDK/platforms/android-21/arch-arm64
+--sysroot $NDK/platforms/android-$API/arch-arm64
 -isystem $NDK/sysroot/usr/include
 -isystem $NDK/sysroot/usr/include/aarch64-linux-android
--D__ANDROID_API__=21
+-D__ANDROID_API__=$API
 $CFLAGS"
 
 CFLAGS="`echo $CFLAGS | tr '\n' ' '`"
 
 LDFLAGS="
 -shared
---sysroot $NDK/platforms/android-21/arch-arm64
+--sysroot $NDK/platforms/android-$API/arch-arm64
 $NDK/sources/cxx-stl/llvm-libc++/libs/arm64-v8a/libc++_static.a
 $NDK/sources/cxx-stl/llvm-libc++abi/../llvm-libc++/libs/arm64-v8a/libc++abi.a
 $NDK/sources/android/support/../../cxx-stl/llvm-libc++/libs/arm64-v8a/libandroid_support.a
 -latomic -Wl,--exclude-libs,libatomic.a
--gcc-toolchain $NDK/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
+-gcc-toolchain $NDK/toolchains/aarch64-linux-android-4.9/prebuilt/$MYARCH
 -target aarch64-none-linux-android -no-canonical-prefixes
 -Wl,--build-id -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--warn-shared-textrel -Wl,--fatal-warnings
 -lc -lm -lstdc++

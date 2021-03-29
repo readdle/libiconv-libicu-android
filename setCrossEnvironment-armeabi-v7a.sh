@@ -6,6 +6,8 @@ IFS='
 NDK=`which ndk-build`
 NDK=`dirname $NDK`
 
+API=21
+
 if uname -s | grep -i "linux" > /dev/null ; then
 	MYARCH=linux-$(arch)
   NDK=`readlink -f $NDK`
@@ -18,7 +20,7 @@ fi
 #echo NDK $NDK
 GCCPREFIX=arm-linux-androideabi
 [ -z "$NDK_TOOLCHAIN_VERSION" ] && NDK_TOOLCHAIN_VERSION=4.9
-[ -z "$PLATFORMVER" ] && PLATFORMVER=android-15
+[ -z "$PLATFORMVER" ] && PLATFORMVER=android-$API
 LOCAL_PATH=`dirname $0`
 if which realpath > /dev/null ; then
 	LOCAL_PATH=`realpath $LOCAL_PATH`
@@ -48,34 +50,34 @@ CFLAGS="
 -O2
 -g
 -gcc-toolchain
-$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
+$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$MYARCH
 -target
-armv7-none-linux-androideabi15
+armv7-none-linux-androideabi$API
 -march=armv7-a
 -mfloat-abi=softfp
 -mfpu=vfpv3-d16
 -mthumb
 -fpic
 -fno-integrated-as
---sysroot $NDK/platforms/android-14/arch-arm
+--sysroot $NDK/platforms/android-$API/arch-arm
 -isystem $NDK/sysroot/usr/include
 -isystem $NDK/sysroot/usr/include/arm-linux-androideabi
--D__ANDROID_API__=15
+-D__ANDROID_API__=$API
 $CFLAGS"
 
 CFLAGS="`echo $CFLAGS | tr '\n' ' '`"
 
 LDFLAGS="
 -shared
---sysroot $NDK/platforms/android-14/arch-arm
+--sysroot $NDK/platforms/android-$API/arch-arm
 $NDK/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_static.a
 $NDK/sources/cxx-stl/llvm-libc++abi/../llvm-libc++/libs/armeabi-v7a/libc++abi.a
 $NDK/sources/android/support/../../cxx-stl/llvm-libc++/libs/armeabi-v7a/libandroid_support.a
 $NDK/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libunwind.a
 -latomic -Wl,--exclude-libs,libatomic.a
 -gcc-toolchain
-$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
--no-canonical-prefixes -target armv7-none-linux-androideabi14
+$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$MYARCH
+-no-canonical-prefixes -target armv7-none-linux-androideabi$API
 -Wl,--fix-cortex-a8 -Wl,--exclude-libs,libunwind.a -Wl,--build-id -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--warn-shared-textrel -Wl,--fatal-warnings
 -lc -lm -lstdc++
 $LDFLAGS"

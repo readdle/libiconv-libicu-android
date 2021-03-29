@@ -93,15 +93,12 @@ cd $BUILDDIR/$ARCH
 		./configure \
 		--host=$GCCPREFIX \
 		--prefix=`pwd`/../../ \
+		--disable-layoutex \
 		--with-library-suffix=$LIBSUFFIX \
 		--with-cross-build=`pwd`/cross \
 		$libtype \
 		--with-data-packaging=library \
 		|| exit 1
-
-#		ICULEHB_CFLAGS="-I$BUILDDIR/$ARCH/include" \
-#		ICULEHB_LIBS="-licu-le-hb" \
-#		--enable-layoutex \
 
 	sed -i.tmp 's/.$(SO_TARGET_VERSION_MAJOR)//' icudefs.mk || exit 1
 	sed -i.tmp 's/$(PKGDATA_VERSIONING) -e/-e/'  data/Makefile || exit 1
