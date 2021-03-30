@@ -10,12 +10,12 @@ NDK=`dirname $NDK`
 API=21
 
 if uname -s | grep -i "linux" > /dev/null ; then
-	MYARCH=linux-$(arch)
+    MYARCH=linux-$(arch)
   NDK=`readlink -f $NDK`
 elif uname -s | grep -i "darwin" > /dev/null ; then
-	MYARCH=darwin-x86_64
+    MYARCH=darwin-x86_64
 elif uname -s | grep -i "windows" > /dev/null ; then
-	MYARCH=windows-x86_64
+    MYARCH=windows-x86_64
 fi
 
 #echo NDK $NDK
@@ -24,9 +24,9 @@ GCCPREFIX=i686-linux-android
 [ -z "$PLATFORMVER" ] && PLATFORMVER=android-$API
 LOCAL_PATH=`dirname $0`
 if which realpath > /dev/null ; then
-	LOCAL_PATH=`realpath $LOCAL_PATH`
+    LOCAL_PATH=`realpath $LOCAL_PATH`
 else
-	LOCAL_PATH=`cd $LOCAL_PATH && pwd`
+    LOCAL_PATH=`cd $LOCAL_PATH && pwd`
 fi
 ARCH=x86
 
